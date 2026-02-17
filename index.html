@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Consulta Verde | Torreón</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde-oscuro: #1a3a2a;
+      --verde-medio: #2d5a3d;
+      --verde-claro: #4a8c5c;
+      --verde-hoja: #6db87a;
+      --crema: #f5f0e8;
+      --crema-oscura: #ede5d0;
+      --tierra: #8b6914;
+      --blanco: #fdfaf5;
+    }
+
+    body {
+      background-color: var(--crema);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--verde-oscuro);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Decorative background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      right: -20%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(109,184,122,0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -30%;
+      left: -15%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(45,90,61,0.10) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 52px;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--verde-medio);
+      color: var(--crema);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      line-height: 1.15;
+      color: var(--verde-oscuro);
+      margin-bottom: 16px;
+    }
+
+    .header h1 em {
+      font-style: italic;
+      color: var(--verde-claro);
+    }
+
+    .header p {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: #4a5a50;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .free-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      background: var(--blanco);
+      border: 1.5px solid var(--verde-hoja);
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-size: 13.5px;
+      color: var(--verde-medio);
+      font-weight: 500;
+    }
+
+    .free-note::before {
+      content: '🌱';
+      font-size: 16px;
+    }
+
+    /* Form card */
+    .form-card {
+      background: var(--blanco);
+      border-radius: 24px;
+      padding: 44px 40px;
+      box-shadow: 0 4px 40px rgba(26,58,42,0.08), 0 1px 3px rgba(26,58,42,0.06);
+      animation: fadeUp 0.8s 0.15s ease both;
+    }
+
+    @media (max-width: 520px) {
+      .form-card { padding: 32px 22px; }
+    }
+
+    /* Form groups */
+    .form-group {
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--verde-medio);
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      background: var(--crema);
+      border: 1.5px solid var(--crema-oscura);
+      border-radius: 12px;
+      padding: 13px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--verde-oscuro);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--verde-claro);
+      box-shadow: 0 0 0 3px rgba(74,140,92,0.12);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+      line-height: 1.6;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: #8a9e90;
+      margin-top: 5px;
+      font-weight: 300;
+    }
+
+    /* Checkbox group */
+    .check-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--crema);
+      border: 1.5px solid var(--crema-oscura);
+      border-radius: 10px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      font-size: 14.5px;
+      color: var(--verde-oscuro);
+      user-select: none;
+    }
+
+    .check-item:hover {
+      border-color: var(--verde-hoja);
+      background: #f0f7f2;
+    }
+
+    .check-item input[type="checkbox"],
+    .check-item input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--verde-claro);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* Service cards */
+    .service-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .service-card {
+      position: relative;
+    }
+
+    .service-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .service-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--crema);
+      border: 2px solid var(--crema-oscura);
+      border-radius: 14px;
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .service-card input[type="radio"]:checked + .service-label {
+      border-color: var(--verde-claro);
+      background: #f0f7f2;
+      box-shadow: 0 0 0 3px rgba(74,140,92,0.10);
+    }
+
+    .service-label:hover {
+      border-color: var(--verde-hoja);
+    }
+
+    .service-emoji {
+      font-size: 26px;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .service-text strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--verde-oscuro);
+      margin-bottom: 3px;
+    }
+
+    .service-text span {
+      font-size: 13px;
+      color: #6a7e72;
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1.5px solid var(--crema-oscura);
+      margin: 32px 0;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--verde-oscuro);
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      background: var(--verde-medio);
+      color: var(--crema);
+      border: none;
+      border-radius: 14px;
+      padding: 17px 24px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 0.3px;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      background: var(--verde-oscuro);
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .privacy-note {
+      text-align: center;
+      font-size: 12px;
+      color: #9aaa9e;
+      margin-top: 14px;
+      font-weight: 300;
+    }
+
+    /* Success message */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 40px 24px;
+    }
+
+    .success-msg .icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .success-msg h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--verde-oscuro);
+      margin-bottom: 10px;
+    }
+
+    .success-msg p {
+      color: #6a7e72;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 36px;
+      font-size: 13px;
+      color: #9aaa9e;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    /* Animation */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Leaf decoration */
+    .leaf-deco {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 10px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="leaf-deco">🌿</div>
+      <div class="badge">Torreón, Coahuila</div>
+      <h1>Tu planta merece<br><em>una segunda oportunidad</em></h1>
+      <p>Cuéntame cómo está tu planta y te contactaré en menos de 24 horas con una evaluación personalizada.</p>
+      <div class="free-note">El diagnóstico inicial es siempre gratuito</div>
+    </div>
+
+    <!-- Form card -->
+    <div class="form-card">
+      <form id="plantForm" action="https://formspree.io/f/maqdjdzd" method="POST">
+
+        <!-- Datos personales -->
+        <p class="section-title">Sobre ti</p>
+
+        <div class="form-group">
+          <label for="nombre">¿Cómo te llamas?</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+        </div>
+
+        <div class="form-group">
+          <label for="zona">¿En qué zona de Torreón estás?</label>
+          <input type="text" id="zona" name="zona" placeholder="Ej. Centro, Residencial, Jardines..." required />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Tu correo electrónico</label>
+          <input type="email" id="email" name="email" placeholder="tucorreo@ejemplo.com" required />
+          <p class="hint">Solo para enviarte consejos y novedades. Sin spam, prometido.</p>
+        </div>
+
+        <hr class="divider"/>
+
+        <!-- Sobre la planta -->
+        <p class="section-title">Sobre tu planta</p>
+
+        <div class="form-group">
+          <label for="planta">¿Qué tipo de planta tienes?</label>
+          <input type="text" id="planta" name="planta" placeholder="Ej. Sansevieria, Pothos, no sé el nombre..." required />
+        </div>
+
+        <div class="form-group">
+          <label for="problema">¿Qué problema notas?</label>
+          <textarea id="problema" name="problema" placeholder="Descríbelo con tus palabras, no hay respuestas incorrectas..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>¿Qué síntomas tiene?</label>
+          <div class="check-group">
+            <label class="check-item">
+              <input type="checkbox" name="sintomas" value="hojas_amarillas"/> Hojas amarillas o cafés
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="sintomas" value="parasitos"/> Parásitos visibles
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="sintomas" value="no_crece"/> No crece
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="sintomas" value="secandose"/> Se está secando
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="sintomas" value="tierra_humeda"/> Tierra siempre húmeda
+            </label>
+            <label class="check-item">
+              <input type="checkbox" name="sintomas" value="otro"/> Otro
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>¿Cuánta luz recibe?</label>
+          <div class="check-group">
+            <label class="check-item">
+              <input type="radio" name="luz" value="directa" required/> Luz directa todo el día
+            </label>
+            <label class="check-item">
+              <input type="radio" name="luz" value="indirecta"/> Luz indirecta
+            </label>
+            <label class="check-item">
+              <input type="radio" name="luz" value="poca"/> Poca luz
+            </label>
+            <label class="check-item">
+              <input type="radio" name="luz" value="no_se"/> No estoy seguro/a
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>¿Con qué frecuencia la riegas?</label>
+          <div class="check-group">
+            <label class="check-item">
+              <input type="radio" name="riego" value="diario" required/> Todos los días
+            </label>
+            <label class="check-item">
+              <input type="radio" name="riego" value="cada_dos_tres"/> Cada 2-3 días
+            </label>
+            <label class="check-item">
+              <input type="radio" name="riego" value="semanal"/> Una vez a la semana
+            </label>
+            <label class="check-item">
+              <input type="radio" name="riego" value="cuando_recuerdo"/> Cuando me acuerdo
+            </label>
+          </div>
+        </div>
+
+        <hr class="divider"/>
+
+        <!-- Servicio -->
+        <p class="section-title">¿Qué servicio te interesa?</p>
+
+        <div class="form-group">
+          <div class="service-grid">
+
+            <div class="service-card">
+              <input type="radio" name="servicio" id="hospital" value="hospital" required/>
+              <label class="service-label" for="hospital">
+                <span class="service-emoji">🏥</span>
+                <div class="service-text">
+                  <strong>Hospital de Plantas</strong>
+                  <span>Recojo tu planta, la cuido en casa con productos biológicos certificados y te la devuelvo recuperada.</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="service-card">
+              <input type="radio" name="servicio" id="whatsapp" value="whatsapp"/>
+              <label class="service-label" for="whatsapp">
+                <span class="service-emoji">💬</span>
+                <div class="service-text">
+                  <strong>Consulta por WhatsApp</strong>
+                  <span>Te oriento paso a paso para que cuides tu planta tú mismo/a desde casa.</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="service-card">
+              <input type="radio" name="servicio" id="sansevieria" value="sansevieria"/>
+              <label class="service-label" for="sansevieria">
+                <span class="service-emoji">🪴</span>
+                <div class="service-text">
+                  <strong>Comprar una Sansevieria</strong>
+                  <span>Plantas de interior resistentes, en sustrato biológico certificado, listas para tu hogar.</span>
+                </div>
+              </label>
+            </div>
+
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Enviar mi consulta →</button>
+        <p class="privacy-note">🔒 Tus datos están seguros y no serán compartidos con terceros.</p>
+
+      </form>
+
+      <!-- Success message (shown after submit) -->
+      <div class="success-msg" id="successMsg">
+        <div class="icon">🌱</div>
+        <h2>¡Gracias por escribirme!</h2>
+        <p>Recibí tu consulta y te contactaré por WhatsApp en menos de 24 horas con tu evaluación personalizada.</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Especialista en cuidado de plantas · Torreón, Coahuila</p>
+      <p style="margin-top:6px;">Lunes a Sábado · Atención personalizada por WhatsApp</p>
+    </div>
+
+  </div>
+
+  <script>
+    const form = document.getElementById('plantForm');
+    const successMsg = document.getElementById('successMsg');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const data = new FormData(form);
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          form.style.display = 'none';
+          successMsg.style.display = 'block';
+        } else {
+          alert('Hubo un error al enviar. Por favor intenta de nuevo.');
+        }
+      } catch (err) {
+        alert('Hubo un error al enviar. Verifica tu conexión.');
+      }
+    });
+  </script>
+</body>
+</html>
